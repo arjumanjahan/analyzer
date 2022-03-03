@@ -1,10 +1,10 @@
 <h3>Software versions</h3>
 <ul>
-    - java version 1.8
-	- Scala version- 2.11.12
-	- Spark version- 2.4.5
-	- Intellij 2020.3
-    - maven
+   <li> - java version 1.8.</li>
+	<li>- Scala version- 2.11.12</li>
+	<li>- Spark version- 2.4.5</li>
+	<li>- Intellij 2020.3</li>
+   <li> - maven</li>
 </ul>
 
 
@@ -29,20 +29,20 @@ Nasa Web Access Log Analyzer Application
 
 <h3>Objective</h3>
 <ul>
-- Fetch top N visitor
-- Fetch top N urls
+<li>- Fetch top N visitor</li>
+<li>- Fetch top N urls</li>
 </ul>
 
 <h3>Code walkthrough</h3>
 <ul>
-Input Download URL - ftp://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz	
-1. src/main/scala
-	* *com.nasa.analyzer.AnalyzerSpark* - This is main entry class. SparkSession object is build here.
-	* *com.nasa.analyzer.AnalyzerTransformer* - The spark Dataset processing logic is present here.
-2. src/main/config
-	* *analyzer.conf* - all configurations are maintained in a Typesafe config file.
-3. src/test/scala
-	* *com.nasa.analyzer.AnalyzerTransformerTest.scala* - This is the Unit test class for NasaWebAccessStatsProcessor.
+<li>-Input Download URL - ftp://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz	</li>
+<li>-1. src/main/scala</li>
+<li>-	* *com.nasa.analyzer.AnalyzerSpark* - This is main entry class. SparkSession object is build here.</li>
+<li>-	* *com.nasa.analyzer.AnalyzerTransformer* - The spark Dataset processing logic is present here.</li>
+<li>-2. src/main/config</li>
+<li>-	* *analyzer.conf* - all configurations are maintained in a Typesafe config file.</li>
+<li>-3. src/test/scala</li>
+<li>-	* *com.nasa.analyzer.AnalyzerTransformerTest.scala* - This is the Unit test class for NasaWebAccessStatsProcessor.</li>
 </ul>
 
 

@@ -1,4 +1,4 @@
-FROM p7hb/docker-spark:2.1.0
+FROM bde2020/spark-base:2.4.3-hadoop2.7
 
 MAINTAINER Durga Haridoss
 
@@ -6,8 +6,8 @@ USER root
 
 RUN yum -y install dos2unix net-tools tar rsync
 
-RUN mkdir -p /app/ccr_core && mkdir -p /app/ccr_core/log && mkdir -p /app/keytab &&\
-    chmod -R 777 /app/keytab && chmod  -R 777 /app/ccr_core/log
+RUN mkdir -p /app && mkdir -p /app/output && mkdir -p /app/log && \
+    chmod  -R 777 /app/log && chmod  -R 777 /app/output
 
 # copy Openshift scripts and docker-entrypoint and .tar.gz  file created by build step
 COPY openshift/scripts/*.sh /usr/local/bin

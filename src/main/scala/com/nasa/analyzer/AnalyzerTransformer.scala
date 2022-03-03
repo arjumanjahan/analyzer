@@ -69,34 +69,40 @@ object AnalyzerTransformer {
     resultFileLoc: String,
     numOfResultsToFetch: Int) = {
 
-    logger.debug("Write results to filesystem started.")
-    accessLogLinesTopVisitors.coalesce(1)
-      .write.option("header", "true")
-      .option("sep", ",")
-      .mode("overwrite")
-      .csv( "C:/files/output/nasa_top_visitors.csv")
+    println(s"Printing Top${numOfResultsToFetch}Visitors ")
+    accessLogLinesTopVisitors.toDF("visitor","dateVisited","numberOfTimesVisited","rated").show(false)
 
-    accessLogLinesTopUrls.coalesce(1)
+    logger.debug("Write results to filesystem started.")
+    accessLogLinesTopVisitors.toDF("visitor","dateVisited","numberOfTimesVisited","rated").coalesce(1)
+      .write.option("header", "true")
+      .mode("overwrite")
+      .parquet( resultFileLoc+"nasa_top_visitors.parquet")
+
+    println(s"Printing Top${numOfResultsToFetch}Urls ")
+    accessLogLinesTopUrls.toDF("endPoint","dateVisited","numberOfHits","rated").show(false)
+
+    accessLogLinesTopUrls.toDF("endPoint","dateVisited","numberOfHits","rated").coalesce(1)
       .write
       .option("header", "true")
-      .option("sep", ",")
       .mode("overwrite")
-      .csv("C:/files/output/nasa_top_urls.csv")
+      .parquet(resultFileLoc+"nasa_top_urls.parquet")
     logger.debug("Write results to filesystem finished.")
   }
 
   //Function to write the corrupt log lines on FileSystem
-  def writeCurruptLogLinesToFS(
-    curruptLogLinesFormatted: Dataset[String],
+  def writeCorruptLogLinesToFS(
+    corruptLogLinesFormatted: Dataset[String],
     resultFileLoc: String) = {
-    curruptLogLinesFormatted.schema
-    curruptLogLinesFormatted.show(false)
-    logger.debug("Write corrupt entried to filesystem started.")
-    curruptLogLinesFormatted.coalesce(1)
+    println("Printing corrupt entries")
+    corruptLogLinesFormatted.schema
+    corruptLogLinesFormatted.show(false)
+    logger.debug("Write corrupt entries to filesystem started.")
+
+    corruptLogLinesFormatted.coalesce(1)
       .write.option("header", "true")
       .mode("overwrite")
-      .csv("C:/files/output/nasa_access_log_currupt_enteries.csv" )
-    logger.debug("Write corrupt entried to filesystem finished.")
+      .parquet(resultFileLoc+"nasa_access_log_currupt_enteries.parquet" )
+    logger.debug("Write corrupt entries to filesystem finished.")
 
   }
 

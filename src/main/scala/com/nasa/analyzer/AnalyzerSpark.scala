@@ -81,13 +81,10 @@ object AnalyzerSpark {
     try {
 
     import sparkSession.implicits._
-    val dataRdd = sparkContext.textFile("C:/files/NASA_access_log_Jul95.gz")
-    // dataRdd.toArray().foreach(line => println(line))
-    // println("IAm here")
-    // println(dataRdd.getClass)
+      println(s"Place the gz file in ${fileLocation}")
+    val dataRdd = sparkContext.textFile(fileLocation)
     logger.info("Start Transformation... ")
     val logLines = dataRdd.map(_.split(" ")).map(attributes => (attributes.length, attributes)).toDS()
-
     logLines.cache()
     //Filter logs based on tokens.size, i.e. attribute.length.
     val filteredLogLinesWithHttp = logLines.filter(logLines("_1") === 10)
@@ -102,7 +99,7 @@ object AnalyzerSpark {
       val corruptLogLinesFormatted = corruptLogLines.map(x => x._1 + " - " + (x._2).mkString(" "))
       corruptLogLinesFormatted.printSchema()
       corruptLogLinesFormatted.show()
-      AnalyzerTransformer.writeCurruptLogLinesToFS(corruptLogLinesFormatted, resultFileLoc)
+      AnalyzerTransformer.writeCorruptLogLinesToFS(corruptLogLinesFormatted, resultFileLoc)
     }
 
     logLines.unpersist()
@@ -149,7 +146,7 @@ object AnalyzerSpark {
   } finally {
     sparkSession.stop()
   }
-    val summary = s"${jobName} executed ${if (status == 0) "Sucesssfully" else "failed"}!}"
+    val summary = s"${jobName} executed ${if (status == 0) "Sucesssfully" else "failed :("}! :)"
       println(summary)
       status
     }

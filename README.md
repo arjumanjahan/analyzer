@@ -63,21 +63,21 @@ Incase required configuration properties are not set, then the application exits
 
 <h3>Assumptions</h3>
 <ul>
-<li> Data is structured in the following format- <li>
+<li> Data is structured in the following format- </li>
  `<visitor> - - [<date> <timezone>] "<method> <url> <protocol>" <resonseCode> <unknownvariable>`
  `E.g.- unicomp6.unicomp.net - - [01/Jul/1995:00:00:14 -0400] "GET /shuttle/countdown/count.gif HTTP/1.0" 200 40310`
   String split functions have been used to derive date and other attributes based on the assumption that the data log line will follow this format.
 
-<li> When log-lines are tokenized using tokenizer **SPACE** (" "), there are entries with-<li>
+<li> When log-lines are tokenized using tokenizer **SPACE** (" "), there are entries with-</li>
 * *10 tokens* - log-lines with 10 tokens have protocol value set as HTTP/1.0
 * *9 tokens* - log-lines with 9 tokens don't have any protocol value set.
 * *8 or less tokens* - these are considered as corrupt lines as it has incomplete information, such as missing method(GET,POST,HEAD etc) and/or missing other information.
 
-<li>To evaluate topNurls, the application gives two options-<li>
+<li>To evaluate topNurls, the application gives two options-</li>
 * filterResponseCodes set with a value - when set with a list of responseCodes, the log-lines with the specified response codes will be filtered out. Eg. a 404 response request can be filtered out when processing top N urls.
 * filterResponseCodes set BLANK - when set to blank, all log-lines will be considered valid to evaluate the top N urls. Only lines missed will be corrupt lines identified as tokens < 9.
 
-<li> To evaluate topNvisitors, no special logic has been added to filter log-lines based on HTTP method. The current implementation considers GET, POST, HEAD etc methods as the visitors.
+To evaluate topNvisitors, no special logic has been added to filter log-lines based on HTTP method. The current implementation considers GET, POST, HEAD etc methods as the visitors.
    </ul>
 	
 

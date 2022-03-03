@@ -1,21 +1,21 @@
 <h3>Software versions</h3>
 <ul>
-   <li> - java version 1.8</li>
-	<li>- Scala version- 2.11.12</li>
-	<li>- Spark version- 2.4.5</li>
-	<li>- Intellij 2020.3</li>
-   <li> - maven</li>
+    <li>java version 1.8</li>
+	<li>Scala version- 2.11.12</li>
+	<li>Spark version- 2.4.5</li>
+	<li>Intellij 2020.3</li>
+   <li>maven</li>
 </ul>
 
 
 <h3># Assumptions</h3>
 <ul>
-<li>*The code developed in a secure network to test it in PROD like environment</li>
-<li>*Spark-scala job is developed to run in cluster mode as it doesn't need a port to be exposed for the job to run the job</li>
-<li>*File ftp://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz is downloaded using curl command in start script</li>
-<li>*In case the file cant be downloaded the same is available in /src/main/config folder</li>
-<li>*the input file is placed in hadoop directory and output files are created in output directory so the output can be analyzed in Dermio</li>
-<li>*The validation of both input and output files are done through Dermio for ease of validation in seconds</li>
+<li>The code developed in a secure network to test it in PROD like environment</li>
+<li>Spark-scala job is developed to run in cluster mode as it doesn't need a port to be exposed for the job to run the job</li>
+<li>File ftp://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz is downloaded using curl command in start script</li>
+<li>In case the file cant be downloaded the same is available in /src/main/config folder</li>
+<li>the input file is placed in hadoop directory and output files are created in output directory so the output can be analyzed in Dermio</li>
+<li>The validation of both input and output files are done through Dermio for ease of validation in seconds</li>
 </ul>
 
 
@@ -36,13 +36,13 @@
 <h3>Code walkthrough</h3>
 <ul>
 <li>Input Download URL - ftp://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz</li>	
-<li>1. src/main/scala</li>
-<li>	* *com.nasa.analyzer.AnalyzerSpark* - This is main entry class. SparkSession object is build here.</li>
-<li>	* *com.nasa.analyzer.AnalyzerTransformer* - The spark Dataset processing logic is present here.</li>
-<li>2. src/main/config</li>
-<li>	* *analyzer.conf* - all configurations are maintained in a Typesafe config file.</li>
-<li>3. src/test/scala</li>
-<li>	* *com.nasa.analyzer.AnalyzerTransformerTest.scala* - This is the Unit test class for NasaWebAccessStatsProcessor.</li>
+<li> src/main/scala</li>
+	   <li>com.nasa.analyzer.AnalyzerSpark* - This is main entry class. SparkSession object is build here.</li>
+      <li>com.nasa.analyzer.AnalyzerTransformer* - The spark Dataset processing logic is present here.</li>
+<li> src/main/config</li>
+      <li>analyzer.conf* - all configurations are maintained in a Typesafe config file.</li>
+<li> src/test/scala</li>
+	  <li>com.nasa.analyzer.AnalyzerTransformerTest.scala* - This is the Unit test class for NasaWebAccessStatsProcessor.</li>
 </ul>
 
 
@@ -63,12 +63,12 @@ Incase required configuration properties are not set, then the application exits
 
 <h3>Assumptions</h3>
 <ul>
-<li>1. Data is structured in the following format- <li>
+<li> Data is structured in the following format- <li>
 <li>	* `<visitor> - - [<date> <timezone>] "<method> <url> <protocol>" <resonseCode> <unknownvariable>`<li>
  <li> 	  `E.g.- unicomp6.unicomp.net - - [01/Jul/1995:00:00:14 -0400] "GET /shuttle/countdown/count.gif HTTP/1.0" 200 40310`<li>
  <li> 	  String split functions have been used to derive date and other attributes based on the assumption that the data log line will follow this format.<li>
 
-<li>2. When log-lines are tokenized using tokenizer **SPACE** (" "), there are entries with-<li>
+<li> When log-lines are tokenized using tokenizer **SPACE** (" "), there are entries with-<li>
 <li>	* *10 tokens* - log-lines with 10 tokens have protocol value set as HTTP/1.0<li>
 <li>	* *9 tokens* - log-lines with 9 tokens don't have any protocol value set.<li>
 <li>	* *8 or less tokens* - these are considered as corrupt lines as it has incomplete information, such as missing method(GET,POST,HEAD etc) and/or missing other information.</li>
@@ -77,16 +77,16 @@ Incase required configuration properties are not set, then the application exits
 <li>	* filterResponseCodes set with a value - when set with a list of responseCodes, the log-lines with the specified response codes will be filtered out. Eg. a 404 response request can be filtered out when processing top N urls.</li>
 <li>	* filterResponseCodes set BLANK - when set to blank, all log-lines will be considered valid to evaluate the top N urls. Only lines missed will be corrupt lines identified as tokens < 9.</li>
 
-<li>4. To evaluate topNvisitors, no special logic has been added to filter log-lines based on HTTP method. The current implementation considers GET, POST, HEAD etc methods as the visitors. </li>
+<li> To evaluate topNvisitors, no special logic has been added to filter log-lines based on HTTP method. The current implementation considers GET, POST, HEAD etc methods as the visitors. </li>
    </ul>
 	
 
 <h3>Steps to compile</h3>
 <ul>
-<li>1. click on maven on the right side of the window screen</li>
-<li>2. Run cmd- `maven clean`. </li>
-<li>3. Run cmd 'maven install' this will create the tar.gz file based on the details in the assembly</li>
-<li>4. The jar is generated in the target directory. Check jar full path in the console-log.</li>
+<li> click on maven on the right side of the window screen</li>
+<li> Run cmd- `maven clean`. </li>
+<li> Run cmd 'maven install' this will create the tar.gz file based on the details in the assembly</li>
+<li>The jar is generated in the target directory. Check jar full path in the console-log.</li>
  </ul>
 
  <p align="center">

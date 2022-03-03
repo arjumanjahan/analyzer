@@ -10,7 +10,6 @@ RUN mkdir -p /app && mkdir -p /app/output && mkdir -p /app/log && \
     chmod  -R 777 /app/log && chmod  -R 777 /app/output
 
 # copy Openshift scripts and docker-entrypoint and .tar.gz  file created by build step
-COPY openshift/scripts/*.sh /usr/local/bin
 COPY docker-entrypoint.sh /usr/local/bin
 COPY target/*tar.gz /app/analyzer
 

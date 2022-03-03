@@ -5,4 +5,4 @@
 
 set -e
 
-app-init.sh $env || echo " error while starting the application"
+/app/analyzer/current/bin/start_analyzer.sh dev || echo " error while starting the application"

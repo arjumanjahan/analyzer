@@ -89,6 +89,10 @@ Incase required configuration properties are not set, then the application exits
 4. The jar is generated in the target directory. Check jar full path in the console-log.
  </ul>
 
+ <p align="center">
+    <img src="ParametersforJob.JPG" width="350"/>
+ </p>
+
 <h2>Spark-Docker Application</h2>
 <h3>Description</h3>
 This is a Spark application that downloads the dataset at ftp://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz and uses Apache Spark to determine the top-n most frequent visitors and urls for each day of the trace. The java application is packaged with a "Dockerized Apache Spark" run in a containerized environment.

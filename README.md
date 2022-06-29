@@ -1,3 +1,9 @@
+<h3> Note </h3>
+<ul>
+<li> This code has been forked from https://github.com/durhar/analyzer and expanded by adding a new function to get a total count of hosts.
+</li>
+</ul>
+
 <h3>Software versions</h3>
 <ul>
     <li>java version 1.8</li>
@@ -31,6 +37,7 @@
 <ul>
 <li>- Fetch top N visitor</li>
 <li>- Fetch top N urls</li>
+<li>- Fetch the count of Hosts</li>
 </ul>
 
 <h3>Code walkthrough</h3>
@@ -100,7 +107,3 @@ To evaluate topNvisitors, no special logic has been added to filter log-lines ba
 <li>For the dockerized spark image I have used the bde2020/spark-base:2.4.3-hadoop2.7 as my base image. The detailed documentation is in the link below:</li>
 <p>https://github.com/P7h/docker-spark</p>
  </ul>
-
-
-
-

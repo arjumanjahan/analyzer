@@ -134,10 +134,14 @@ object AnalyzerSpark {
     val accessLogLinesTopUrls = AnalyzerTransformer.getTopNUrls(accessLogLines, numOfResultsToFetch, window, FilterResponseCodeSeq)
     logger.info("Top" + numOfResultsToFetch + " urls processed.")
 
+    //Total Host Counts
+    val accessLogLinesTotalHostCounts = AnalyzerTransformer.getHostCounts(accessLogLines,  window, FilterResponseCodeSeq)
+    logger.info("Total Host Counts is.")
+
     accessLogLines.unpersist()
 
     //Write the output to FS
-    AnalyzerTransformer.writeResultsToFS(accessLogLinesTopVisitors, accessLogLinesTopUrls, resultFileLoc, numOfResultsToFetch)
+    AnalyzerTransformer.writeResultsToFS(accessLogLinesTopVisitors,accessLogLinesTotalHostCounts, accessLogLinesTopUrls, resultFileLoc, numOfResultsToFetch)
     logger.info("Data processing finished. Output location- " + resultFileLoc)
   }catch {
     case e: Exception =>

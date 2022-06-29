@@ -1,17 +1,14 @@
 package com.nasa.analyzer
 
 import org.apache.log4j.{BasicConfigurator, Logger}
-import org.apache.spark.sql.{Dataset,Row}
+import org.apache.spark.sql.{Dataset, Row}
 import org.apache.spark.sql.expressions.WindowSpec
-import org.apache.spark.sql.functions.{col,dense_rank,not}
+import org.apache.spark.sql.functions.{col, count, dense_rank, not}
 
 object AnalyzerTransformer {
 
-
   BasicConfigurator.configure()
   val logger = Logger.getLogger(this.getClass.getName())
-
-
 
   //Function to get top N visitors
   def getTopNVisitors(
@@ -62,10 +59,36 @@ object AnalyzerTransformer {
 
   }
 
+  //Function to get count of Hosts
+  def getHostCounts(
+                   accessLogLines: Dataset[AccessLog],
+                   window: WindowSpec,
+                   filterResponseCodesSeq: Seq[String]): Dataset[Row] = {
+
+    logger.debug("Get total Host Counts")
+
+    var accessLogLinesTotalHostCounts: org.apache.spark.sql.DataFrame = null;
+
+    if (filterResponseCodesSeq.size > 0) {
+      logger.debug("responseCode filtering is enabled when retrieving total Host Counts. The response Codes are- " + filterResponseCodesSeq)
+      accessLogLinesTotalHostCounts = accessLogLines.filter(not(col("responseCode") isin (filterResponseCodesSeq: _*)))
+        .groupBy("host")
+        .agg(count("url")as ("count").distinct).select(col("host"),col("count"))
+    } else {
+      logger.debug("responseCode filtering is disabled when retrieving total host counts")
+      accessLogLinesTotalHostCounts = accessLogLines.groupBy("host")
+        .agg(count("url")as ("count").distinct).select(col("host"),col("count"))
+    }
+    logger.debug("Total Host Counts are ")
+    return accessLogLinesTotalHostCounts
+  }
+
+
   //Function to write the results on FileSystem
   def writeResultsToFS(
     accessLogLinesTopVisitors: Dataset[Row],
     accessLogLinesTopUrls: Dataset[Row],
+    accessLogLinesTotalHostCounts: Dataset[Row],
     resultFileLoc: String,
     numOfResultsToFetch: Int) = {
 
@@ -78,7 +101,7 @@ object AnalyzerTransformer {
       .mode("overwrite")
       .parquet( resultFileLoc+"nasa_top_visitors.parquet")
 
-    println(s"Printing Top${numOfResultsToFetch}Urls ")
+    println("Printing Top${numOfResultsToFetch}Urls ")
     accessLogLinesTopUrls.toDF("endPoint","dateVisited","numberOfHits","rated").show(false)
 
     accessLogLinesTopUrls.toDF("endPoint","dateVisited","numberOfHits","rated").coalesce(1)
@@ -87,6 +110,12 @@ object AnalyzerTransformer {
       .mode("overwrite")
       .parquet(resultFileLoc+"nasa_top_urls.parquet")
     logger.debug("Write results to filesystem finished.")
+
+    logger.debug("Write results to filesystem started.")
+    accessLogLinesTotalHostCounts.toDF("host","count").coalesce(1)
+      .write.option("header", "true")
+      .mode("overwrite")
+      .parquet( resultFileLoc+"nasa_total_hostcounts.parquet")
   }
 
   //Function to write the corrupt log lines on FileSystem
